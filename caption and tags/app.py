@@ -8,6 +8,8 @@ os.environ["GOOGLE_API_KEY"]=GOOGLE_API_KEY
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 print("api key configured")
 image_model=genai.GenerativeModel("gemini-2.5-flash")
+
+@st.cache_data
 def caption(platform,max_length,image):
   min_length=20
   if platform is None:
@@ -29,10 +31,10 @@ def tags(platform,max_tags,image):
 st.title("Image Caption And Tag Generator")
 st.write("This app generate captions and tags for an image")
 upload=st.file_uploader("Choose an image",type=["png","jpeg","jpg"])
-max_length=st.slider("Select the length of the caption",50,70,100)
-max_tags=st.slider("Select the maximum number of tags",5,7,9,12)
+max_length=st.slider("Select the length of the caption",50,100,70)
+max_tags=st.slider("Select the maximum number of tags",5,9,7,12)
 
-platform=""
+platform=None
 
 if st.button("Identify your image"):
   if upload is not None:
@@ -63,8 +65,8 @@ if st.button("Twitter Caption and Tags"):
     st.image(image,caption="Uploaded image successfully",use_column_width=True)
     st.write("")
     st.write("Generating captions and tags for Twitter")
-    caption=caption("Instagram",max_length,image)
-    tag=tags("Instagram",max_tags,image)
+    caption=caption("Twitter",max_length,image)
+    tag=tags("Twitter",max_tags,image)
     st.write(f"Caption: {caption}\n\n Tags:{tag}")
   else:
     st.write("upload an image first")
